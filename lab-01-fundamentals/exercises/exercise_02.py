@@ -2,20 +2,21 @@
 Exercise 2: Build a Chain for Product Descriptions
 
 TASK:
-Create an LLMChain that generates and formats product descriptions.
+Create a chain using LCEL (LangChain Expression Language) that generates and formats product descriptions.
 The chain should:
 1. Accept product name, category, and key features
 2. Generate a compelling product description
 3. Format it as a structured output with title, description, and call-to-action
 
 INSTRUCTIONS:
-1. Import LLMChain and necessary modules
+1. Import necessary modules (PromptTemplate, ChatOpenAI)
 2. Create a prompt template that includes all required information
-3. Create an LLMChain combining the prompt and LLM
+3. Create a chain using LCEL by combining the prompt and LLM with the pipe operator (|)
 4. Run the chain with sample product data
 5. Display the formatted output
 
-HINT: Use LLMChain(llm=llm, prompt=prompt) to create the chain
+HINT: Use the pipe operator to create a chain: chain = prompt | llm
+      Then invoke it with: result = chain.invoke(product_data)
 """
 import os
 from dotenv import load_dotenv
@@ -33,7 +34,7 @@ load_dotenv()
 # The template should include: product_name, category, key_features
 # prompt = ...
 
-# TODO: Create an LLMChain
+# TODO: Create a chain using LCEL (pipe operator)
 # chain = ...
 
 # Sample product data

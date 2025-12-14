@@ -1,24 +1,29 @@
 """
-Example: Simple LLMChain
+Example: Simple Chain with LCEL
 
-This example demonstrates how to create and use a basic LLMChain
-to combine prompts and LLMs.
+This example demonstrates how to create and use a basic chain
+using LangChain Expression Language (LCEL) to combine prompts and LLMs.
 """
 import os
 from dotenv import load_dotenv
-from langchain.prompts import PromptTemplate
-from langchain.chains import LLMChain
+from langchain_core.prompts import PromptTemplate
 from langchain_openai import ChatOpenAI
 
 # Load environment variables
 load_dotenv()
 
 def simple_chain_example():
-    """Demonstrate simple LLMChain usage."""
+    """Demonstrate simple chain usage with LCEL."""
     
     # Initialize the LLM
-    llm = ChatOpenAI(model="gpt-3.5-turbo", temperature=0.7)
-    
+    llm_model = os.getenv("LLM_MODEL")
+    llm = ChatOpenAI(
+        model=llm_model, 
+        temperature=0.7, 
+        api_key=os.getenv("OPENAI_API_KEY"),
+        base_url=os.getenv("BASE_URL")
+    )
+
     # Create a prompt template
     prompt = PromptTemplate(
         input_variables=["product", "target_audience"],
@@ -26,29 +31,30 @@ def simple_chain_example():
                  "Highlight key features and benefits in 2-3 sentences."
     )
     
-    # Create a chain
-    chain = LLMChain(llm=llm, prompt=prompt)
+    # Create a chain using LCEL (LangChain Expression Language)
+    # The pipe operator | chains the prompt and LLM together
+    chain = prompt | llm
     
     # Run the chain
-    result = chain.run(
-        product="wireless noise-canceling headphones",
-        target_audience="professionals who work from home"
-    )
+    result = chain.invoke({
+        "product": "wireless noise-canceling headphones",
+        "target_audience": "professionals who work from home"
+    })
     
     print("Product Description:")
     print("-" * 50)
-    print(result)
+    print(result.content)
     print("-" * 50)
     
-    # You can also use invoke for more control
-    result_dict = chain.invoke({
+    # Run with another example
+    result2 = chain.invoke({
         "product": "smart fitness tracker",
         "target_audience": "fitness enthusiasts"
     })
     
     print("\nAnother Product Description:")
     print("-" * 50)
-    print(result_dict["text"])
+    print(result2.content)
     print("-" * 50)
 
 if __name__ == "__main__":

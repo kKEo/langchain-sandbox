@@ -6,8 +6,9 @@ with LangChain's PromptTemplate class.
 """
 import os
 from dotenv import load_dotenv
-from langchain.prompts import PromptTemplate
+from langchain_core.prompts import PromptTemplate
 from langchain_openai import ChatOpenAI
+
 
 # Load environment variables
 load_dotenv()
@@ -16,7 +17,12 @@ def basic_prompt_example():
     """Demonstrate basic prompt template usage."""
     
     # Initialize the LLM
-    llm = ChatOpenAI(model="gpt-3.5-turbo", temperature=0.7)
+    llm = ChatOpenAI(
+        model=os.getenv("LLM_MODEL"), 
+        temperature=0.7, 
+        api_key=os.getenv("OPENAI_API_KEY"),
+        base_url=os.getenv("BASE_URL")
+    )
     
     # Create a simple prompt template
     template = "Write a {style} story about {topic} in exactly {word_count} words."

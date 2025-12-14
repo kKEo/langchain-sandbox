@@ -6,7 +6,7 @@ conversational interactions with chat models.
 """
 import os
 from dotenv import load_dotenv
-from langchain.prompts import ChatPromptTemplate, SystemMessagePromptTemplate, HumanMessagePromptTemplate
+from langchain_core.prompts import ChatPromptTemplate, SystemMessagePromptTemplate, HumanMessagePromptTemplate
 from langchain_openai import ChatOpenAI
 
 # Load environment variables
@@ -16,7 +16,14 @@ def chat_prompt_example():
     """Demonstrate chat prompt template usage."""
     
     # Initialize the chat model
-    llm = ChatOpenAI(model="gpt-3.5-turbo", temperature=0.7)
+    llm_model = os.getenv("LLM_MODEL")
+
+    llm = ChatOpenAI(
+        model=llm_model, 
+        temperature=0.7, 
+        api_key=os.getenv("OPENAI_API_KEY"),
+        base_url=os.getenv("BASE_URL")
+    )
     
     # Create a chat prompt template with system and human messages
     system_template = "You are a helpful assistant that explains {subject} in a {tone} way."

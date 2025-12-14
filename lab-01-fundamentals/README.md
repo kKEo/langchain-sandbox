@@ -7,7 +7,7 @@
 By the end of this lab, you will be able to:
 - Understand LangChain's core architecture and components
 - Create and manage prompt templates
-- Build basic chains (LLMChain, SequentialChain)
+- Build basic chains using LCEL (LangChain Expression Language)
 - Work with different LLM providers (OpenAI, Anthropic, etc.)
 - Handle LLM outputs and parsing
 
@@ -54,9 +54,9 @@ By the end of this lab, you will be able to:
    - Model parameters (temperature, max_tokens, etc.)
 
 4. **Basic Chains**
-   - `LLMChain` for simple LLM calls
-   - `SimpleSequentialChain` for multi-step workflows
-   - `SequentialChain` for complex workflows
+   - LCEL (LangChain Expression Language) for simple LLM calls
+   - Chaining multiple steps using the pipe operator (`|`)
+   - Building complex workflows with LCEL
 
 5. **Output Parsers**
    - `StrOutputParser` for string outputs
@@ -83,7 +83,7 @@ The `examples/` directory contains reference implementations:
 - `01_verify_setup.py` - Verify your environment is set up correctly
 - `02_basic_prompt.py` - Basic prompt template usage
 - `03_chat_prompt.py` - Chat prompt templates
-- `04_simple_chain.py` - Simple LLMChain example
+- `04_simple_chain.py` - Simple chain example using LCEL
 - `05_sequential_chain.py` - Multi-step chain example
 - `06_output_parsing.py` - Output parsing examples
 
@@ -92,19 +92,22 @@ The `examples/` directory contains reference implementations:
 ### Prompt Templates
 
 ```python
-from langchain.prompts import PromptTemplate
+from langchain_core.prompts import PromptTemplate
 
 template = "Write a {style} story about {topic}"
 prompt = PromptTemplate.from_template(template)
 ```
 
-### Chains
+### Chains with LCEL
 
 ```python
-from langchain.chains import LLMChain
+from langchain_core.prompts import PromptTemplate
+from langchain_openai import ChatOpenAI
 
-chain = LLMChain(llm=llm, prompt=prompt)
-result = chain.run(style="funny", topic="robots")
+prompt = PromptTemplate.from_template("Write a {style} story about {topic}")
+llm = ChatOpenAI()
+chain = prompt | llm
+result = chain.invoke({"style": "funny", "topic": "robots"})
 ```
 
 ### Output Parsers

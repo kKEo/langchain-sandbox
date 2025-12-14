@@ -6,8 +6,8 @@ using Pydantic models and output parsers.
 """
 import os
 from dotenv import load_dotenv
-from langchain.prompts import PromptTemplate
-from langchain.output_parsers import PydanticOutputParser
+from langchain_core.prompts import PromptTemplate
+from langchain_core.output_parsers import PydanticOutputParser
 from langchain_openai import ChatOpenAI
 from pydantic import BaseModel, Field
 from typing import List
@@ -29,7 +29,12 @@ def output_parsing_example():
     """Demonstrate output parsing with Pydantic."""
     
     # Initialize the LLM
-    llm = ChatOpenAI(model="gpt-3.5-turbo", temperature=0.7)
+    llm = ChatOpenAI(
+        model= os.getenv("LLM_MODEL"), 
+        temperature=0.7, 
+        api_key=os.getenv("OPENAI_API_KEY"),
+        base_url=os.getenv("BASE_URL")
+    )
     
     # Create the output parser
     parser = PydanticOutputParser(pydantic_object=Recipe)

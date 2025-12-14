@@ -3,8 +3,7 @@ Solution to Exercise 2: Build a Chain for Product Descriptions
 """
 import os
 from dotenv import load_dotenv
-from langchain.prompts import PromptTemplate
-from langchain.chains import LLMChain
+from langchain_core.prompts import PromptTemplate
 from langchain_openai import ChatOpenAI
 
 # Load environment variables
@@ -30,8 +29,8 @@ CALL-TO-ACTION: [An engaging call-to-action phrase]
 Generate the product description:"""
 )
 
-# Create an LLMChain
-chain = LLMChain(llm=llm, prompt=prompt)
+# Create a chain using LCEL (LangChain Expression Language)
+chain = prompt | llm
 
 # Sample product data
 product_data = {
@@ -43,9 +42,9 @@ product_data = {
 # Run the chain
 print("Generating Product Description...")
 print("=" * 50)
-result = chain.run(**product_data)
+result = chain.invoke(product_data)
 
 # Print the result
-print(result)
+print(result.content)
 print("=" * 50)
 

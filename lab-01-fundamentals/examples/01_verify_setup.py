@@ -50,7 +50,7 @@ def verify_setup():
     # Test basic import
     try:
         from langchain_openai import ChatOpenAI
-        from langchain.prompts import PromptTemplate
+        from langchain_core.prompts import PromptTemplate
         print("✓ Core LangChain modules imported successfully")
     except ImportError as e:
         print(f"❌ Import error: {e}")
