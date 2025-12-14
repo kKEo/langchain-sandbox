@@ -26,18 +26,40 @@ load_dotenv()
 
 # TODO: Import necessary modules
 # from langchain...
+from langchain_core.prompts import PromptTemplate
+from langchain_openai import ChatOpenAI
 
 # TODO: Initialize the LLM
 # llm = ...
-
+llm = ChatOpenAI(
+    model=os.getenv("LLM_MODEL"),
+    temperature=0.7,
+    api_key=os.getenv("OPENAI_API_KEY"),
+    base_url=os.getenv("BASE_URL")
+)
 # TODO: Create a prompt template for product descriptions
 # The template should include: product_name, category, key_features
 # prompt = ...
+prompt = PromptTemplate(
+    input_variables=["product_name", "category", "key_features"],
+    template="""
+    Create a compelling product description for marketing purposes.
+    Product Name: {product_name}
+    Category: {category}
+    Key Features: {key_features}
 
+    Generate a product description that is attention-grabbing and 
+    appropriate for the target audience. Format your response as follows:
+    TITLE: [A catchy title]
+    DESCRIPTION: [A detailed description highlighting benefits and features]
+    CALL-TO-ACTION: [An engaging call-to-action phrase]
+    """
+)
 # TODO: Create a chain using LCEL (pipe operator)
 # chain = ...
+chain = prompt | llm
 
-# Sample product data
+
 product_data = {
     "product_name": "EcoWater Pro",
     "category": "Home & Kitchen",
@@ -46,9 +68,12 @@ product_data = {
 
 # TODO: Run the chain with the product data
 # result = ...
+print("Generating Product Description...")
+result = chain.invoke(product_data)
 
 # TODO: Print the result
 # print(...)
-
+print(result.content)
+print("-" * 50)
 print("Exercise 2: Complete the code above to generate product descriptions")
 

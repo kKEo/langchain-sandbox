@@ -19,24 +19,45 @@ HINT: Use PromptTemplate.from_template() or PromptTemplate() constructor
 """
 import os
 from dotenv import load_dotenv
-
-# Load environment variables
 load_dotenv()
 
 # TODO: Import necessary modules
 # from langchain...
+from langchain_core.prompts import PromptTemplate
+from langchain_openai import ChatOpenAI
 
 # TODO: Create your prompt template here
-# template = ...
+template = PromptTemplate(
+    input_variables=["product_name", "target_audience", "urgency"],
+    template="""
+    Create a compelling email subject line for a marketing campaign. 
+    Product: {product_name} 
+    Target Audience: {target_audience} 
+    Urgent Offer: {urgency}
+
+    Generate a subject line that is attention-grabbing and appropriate for the target audience.
+    """
+)
 
 # TODO: Initialize the LLM
 # llm = ...
+llm = ChatOpenAI(
+    model=os.getenv("LLM_MODEL"),
+    temperature=0.7,
+    api_key=os.getenv("OPENAI_API_KEY"),
+    base_url=os.getenv("BASE_URL")
+)
 
 # TODO: Format the prompt with sample values
 # formatted_prompt = ...
-
+formatted_prompt = template.format(
+    product_name="Premium Coffee Subscription",
+    target_audience="coffee enthusiasts",
+    urgency="True"
+)
 # TODO: Get response from LLM and print it
 # response = ...
-
+response = llm.invoke(formatted_prompt)
+print(response.content)
+print("-" * 50)
 print("Exercise 1: Complete the code above to generate email subject lines")
-
