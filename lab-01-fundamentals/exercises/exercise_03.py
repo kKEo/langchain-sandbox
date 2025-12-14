@@ -1,0 +1,57 @@
+"""
+Exercise 3: Implement a Multi-Step Chain
+
+TASK:
+Create a sequential chain that:
+1. Generates a blog post outline on a given topic
+2. Expands the outline into a full blog post
+3. Creates a social media summary of the blog post
+
+INSTRUCTIONS:
+1. Create three separate chains:
+   - Chain 1: Generate outline (input: topic, output: outline)
+   - Chain 2: Expand outline (input: outline, output: blog_post)
+   - Chain 3: Create summary (input: blog_post, output: summary)
+2. Use SimpleSequentialChain or SequentialChain to combine them
+3. Run with a sample topic
+4. Display all outputs
+
+HINT: Use output_key parameter in LLMChain to name intermediate outputs
+      Use SequentialChain for named outputs, SimpleSequentialChain for simple flow
+"""
+import os
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
+
+# TODO: Import necessary modules
+# from langchain...
+
+# TODO: Initialize the LLM
+# llm = ...
+
+# TODO: Chain 1 - Generate outline
+# outline_prompt = ...
+# outline_chain = ...
+
+# TODO: Chain 2 - Expand to blog post
+# blog_prompt = ...
+# blog_chain = ...
+
+# TODO: Chain 3 - Create social media summary
+# summary_prompt = ...
+# summary_chain = ...
+
+# TODO: Create sequential chain
+# sequential_chain = ...
+
+# TODO: Run the chain with a topic
+# topic = "The Future of Artificial Intelligence"
+# result = ...
+
+# TODO: Print the results
+# print(...)
+
+print("Exercise 3: Complete the code above to create a multi-step chain")
+
