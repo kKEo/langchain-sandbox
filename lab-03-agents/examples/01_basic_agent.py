@@ -6,9 +6,11 @@ built-in tools like Wikipedia and Calculator.
 """
 import os
 from dotenv import load_dotenv
-from langchain.agents import initialize_agent, AgentType
-from langchain.tools import WikipediaQueryRun, Tool
-from langchain.utilities import WikipediaAPIWrapper
+from langchain import hub
+from langchain.agents import create_react_agent, AgentExecutor
+from langchain_core.tools import Tool
+from langchain_community.tools import WikipediaQueryRun
+from langchain_community.utilities import WikipediaAPIWrapper
 from langchain_openai import ChatOpenAI
 
 # Load environment variables
@@ -38,12 +40,17 @@ def basic_agent_example():
         description="Useful for performing mathematical calculations. Input should be a valid Python expression."
     )
     
-    # Initialize agent with tools
+    # Get the react prompt template
+    prompt = hub.pull("hwchase17/react")
+    
+    # Create agent with tools
     tools = [wikipedia, calc_tool]
-    agent = initialize_agent(
+    agent = create_react_agent(llm, tools, prompt)
+    
+    # Create agent executor
+    agent_executor = AgentExecutor(
+        agent=agent,
         tools=tools,
-        llm=llm,
-        agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
         verbose=True
     )
     
@@ -60,8 +67,8 @@ def basic_agent_example():
     for query in queries:
         print(f"\nQuery: {query}")
         print("-" * 70)
-        result = agent.run(query)
-        print(f"Result: {result}")
+        result = agent_executor.invoke({"input": query})
+        print(f"Result: {result['output']}")
         print("-" * 70)
 
 if __name__ == "__main__":

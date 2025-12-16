@@ -9,13 +9,13 @@ about a given topic. The agent should:
 3. Provide a concise answer
 
 INSTRUCTIONS:
-1. Import necessary modules (initialize_agent, WikipediaQueryRun, etc.)
+1. Import necessary modules (create_react_agent, AgentExecutor, WikipediaQueryRun, etc.)
 2. Create a Wikipedia tool
-3. Initialize an agent with the tool
+3. Build an agent with the React prompt from the hub and wrap it in AgentExecutor
 4. Test with a research query
 5. Display the agent's reasoning process
 
-HINT: Use AgentType.ZERO_SHOT_REACT_DESCRIPTION
+HINT: Pull the `hwchase17/react` prompt and call `agent_executor.invoke({"input": ...})`
 """
 import os
 from dotenv import load_dotenv
@@ -24,7 +24,11 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # TODO: Import necessary modules
-# from langchain...
+# from langchain import hub
+# from langchain.agents import AgentExecutor, create_react_agent
+# from langchain_community.tools import WikipediaQueryRun
+# from langchain_community.utilities import WikipediaAPIWrapper
+# from langchain_openai import ChatOpenAI
 
 # TODO: Initialize the LLM
 # llm = ...
@@ -32,12 +36,14 @@ load_dotenv()
 # TODO: Create Wikipedia tool
 # wikipedia = ...
 
-# TODO: Initialize agent
+# TODO: Build prompt and agent
+# prompt = ...
 # agent = ...
+# agent_executor = AgentExecutor(...)
 
 # TODO: Run research query
 # query = "What is machine learning and its main applications?"
-# result = ...
+# result = agent_executor.invoke({"input": query})
 
 print("Exercise 1: Complete the code above to create a research agent")
 

@@ -1,10 +1,10 @@
 """
 Solution to Exercise 5: Handle Agent Failures Gracefully
 """
-import os
 from dotenv import load_dotenv
-from langchain.agents import initialize_agent, AgentType
-from langchain.tools import Tool
+from langchain import hub
+from langchain.agents import AgentExecutor, create_react_agent
+from langchain_core.tools import Tool
 from langchain_openai import ChatOpenAI
 
 # Load environment variables
@@ -39,10 +39,11 @@ tools = [
 
 # Initialize agent with error handling
 llm = ChatOpenAI(model="gpt-3.5-turbo", temperature=0)
-agent = initialize_agent(
+prompt = hub.pull("hwchase17/react")
+agent = create_react_agent(llm, tools, prompt)
+agent_executor = AgentExecutor(
+    agent=agent,
     tools=tools,
-    llm=llm,
-    agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
     verbose=True,
     max_iterations=3,  # Limit iterations to prevent infinite loops
     handle_parsing_errors=True  # Handle parsing errors gracefully
@@ -64,8 +65,8 @@ for query, expected in test_cases:
     print("-" * 70)
     
     try:
-        result = agent.run(query)
-        print(f"✓ Success: {result}")
+        result = agent_executor.invoke({"input": query})
+        print(f"✓ Success: {result['output']}")
     except ValueError as e:
         print(f"✗ Caught ValueError: {e}")
         print("  Agent handled tool failure gracefully")
@@ -94,17 +95,17 @@ recursive_tools = [
     )
 ]
 
-limited_agent = initialize_agent(
+recursive_agent = create_react_agent(llm, recursive_tools, prompt)
+limited_agent = AgentExecutor(
+    agent=recursive_agent,
     tools=recursive_tools,
-    llm=llm,
-    agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
     verbose=True,
     max_iterations=2  # Very low limit for demonstration
 )
 
 try:
-    result = limited_agent.run("Process this query")
-    print(f"Result: {result}")
+    result = limited_agent.invoke({"input": "Process this query"})
+    print(f"Result: {result['output']}")
 except Exception as e:
     print(f"Agent stopped due to max iterations: {type(e).__name__}")
     print("This is expected behavior to prevent infinite loops.")

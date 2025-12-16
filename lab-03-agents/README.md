@@ -69,17 +69,20 @@ By the end of this lab, you will be able to:
 ### Basic Agent
 
 ```python
-from langchain.agents import initialize_agent, AgentType
-from langchain.tools import Tool
+from langchain import hub
+from langchain.agents import create_react_agent, AgentExecutor
+from langchain_core.tools import Tool
 
 tools = [Tool(name="Search", func=search_func, description="...")]
-agent = initialize_agent(tools, llm, agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION)
+prompt = hub.pull("hwchase17/react")
+agent = create_react_agent(llm, tools, prompt)
+agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True)
 ```
 
 ### Custom Tool
 
 ```python
-from langchain.tools import BaseTool
+from langchain_core.tools import BaseTool
 
 class CustomTool(BaseTool):
     name = "custom_tool"

@@ -10,11 +10,12 @@ mathematical operations. Include tools for:
 
 INSTRUCTIONS:
 1. Create custom tools for each math operation
-2. Initialize an agent with all tools
-3. Test with complex mathematical queries
-4. Ensure the agent can chain multiple operations
+2. Build an agent with all tools using the React prompt from the hub
+3. Wrap the agent with AgentExecutor
+4. Test with complex mathematical queries
+5. Ensure the agent can chain multiple operations
 
-HINT: Create Tool objects with clear descriptions
+HINT: Use `langchain_core.tools.Tool` and call `agent_executor.invoke(...)`
 """
 import os
 from dotenv import load_dotenv
@@ -24,7 +25,10 @@ import math
 load_dotenv()
 
 # TODO: Import necessary modules
-# from langchain...
+# from langchain import hub
+# from langchain.agents import AgentExecutor, create_react_agent
+# from langchain_core.tools import Tool
+# from langchain_openai import ChatOpenAI
 
 # TODO: Define math functions
 # def add(a, b): ...
@@ -35,8 +39,10 @@ load_dotenv()
 # TODO: Create Tool objects for each function
 # tools = [...]
 
-# TODO: Initialize agent
+# TODO: Initialize agent executor
+# prompt = ...
 # agent = ...
+# agent_executor = AgentExecutor(...)
 
 # TODO: Test with queries
 # queries = [

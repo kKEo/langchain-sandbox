@@ -6,9 +6,11 @@ to answer complex queries.
 """
 import os
 from dotenv import load_dotenv
-from langchain.agents import initialize_agent, AgentType
-from langchain.tools import Tool, WikipediaQueryRun
-from langchain.utilities import WikipediaAPIWrapper
+from langchain import hub
+from langchain.agents import create_react_agent, AgentExecutor
+from langchain_core.tools import Tool
+from langchain_community.tools import WikipediaQueryRun
+from langchain_community.utilities import WikipediaAPIWrapper
 from langchain_openai import ChatOpenAI
 
 # Load environment variables
@@ -59,11 +61,16 @@ def multi_tool_agent_example():
         )
     ]
     
-    # Initialize agent
-    agent = initialize_agent(
+    # Get the react prompt template
+    prompt = hub.pull("hwchase17/react")
+    
+    # Create agent
+    agent = create_react_agent(llm, tools, prompt)
+    
+    # Create agent executor
+    agent_executor = AgentExecutor(
+        agent=agent,
         tools=tools,
-        llm=llm,
-        agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
         verbose=True,
         max_iterations=5
     )
@@ -82,8 +89,8 @@ def multi_tool_agent_example():
         print(f"\nQuery: {query}")
         print("-" * 70)
         try:
-            result = agent.run(query)
-            print(f"Result: {result}")
+            result = agent_executor.invoke({"input": query})
+            print(f"Result: {result['output']}")
         except Exception as e:
             print(f"Error: {e}")
         print("-" * 70)

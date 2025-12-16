@@ -7,11 +7,12 @@ weather and news. Use simulated tools for weather and news.
 
 INSTRUCTIONS:
 1. Create custom WeatherTool and NewsTool
-2. Initialize an agent with both tools
-3. Test queries that require both tools
-4. Handle cases where agent needs to use multiple tools
+2. Build an agent with both tools using the React prompt
+3. Wrap it in an AgentExecutor
+4. Test queries that require both tools
+5. Handle cases where the agent needs to use multiple tools
 
-HINT: Use BaseTool to create custom tools
+HINT: Use BaseTool from `langchain_core.tools` and `agent_executor.invoke(...)`
 """
 import os
 from dotenv import load_dotenv
@@ -20,7 +21,10 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # TODO: Import necessary modules
-# from langchain...
+# from langchain import hub
+# from langchain.agents import AgentExecutor, create_react_agent
+# from langchain_core.tools import BaseTool
+# from langchain_openai import ChatOpenAI
 
 # TODO: Create WeatherTool class
 # class WeatherTool(BaseTool): ...
@@ -29,7 +33,9 @@ load_dotenv()
 # class NewsTool(BaseTool): ...
 
 # TODO: Initialize agent with both tools
+# prompt = ...
 # agent = ...
+# agent_executor = AgentExecutor(...)
 
 # TODO: Test queries
 # queries = [

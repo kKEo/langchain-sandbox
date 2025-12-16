@@ -4,10 +4,10 @@ Example: Agent Error Handling
 This example demonstrates how to handle errors in agent execution,
 including timeouts, max iterations, and tool errors.
 """
-import os
 from dotenv import load_dotenv
-from langchain.agents import initialize_agent, AgentType
-from langchain.tools import Tool
+from langchain import hub
+from langchain.agents import AgentExecutor, create_react_agent
+from langchain_core.tools import Tool
 from langchain_openai import ChatOpenAI
 
 # Load environment variables
@@ -35,10 +35,11 @@ def error_handling_example():
     ]
     
     # Initialize agent with error handling
-    agent = initialize_agent(
+    prompt = hub.pull("hwchase17/react")
+    agent = create_react_agent(llm, tools, prompt)
+    agent_executor = AgentExecutor(
+        agent=agent,
         tools=tools,
-        llm=llm,
-        agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
         verbose=True,
         max_iterations=3,  # Limit iterations to prevent infinite loops
         handle_parsing_errors=True  # Handle parsing errors gracefully
@@ -58,8 +59,8 @@ def error_handling_example():
         print(f"Query: {query}")
         print("-" * 70)
         try:
-            result = agent.run(query)
-            print(f"Result: {result}")
+            result = agent_executor.invoke({"input": query})
+            print(f"Result: {result['output']}")
         except Exception as e:
             print(f"Caught error: {type(e).__name__}: {e}")
         print("-" * 70)
@@ -82,17 +83,17 @@ def error_handling_example():
         )
     ]
     
-    limited_agent = initialize_agent(
+    recursive_agent = create_react_agent(llm, recursive_tools, prompt)
+    limited_agent = AgentExecutor(
+        agent=recursive_agent,
         tools=recursive_tools,
-        llm=llm,
-        agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
         verbose=True,
         max_iterations=2  # Very low limit for demonstration
     )
     
     try:
-        result = limited_agent.run("Process this")
-        print(f"Result: {result}")
+        result = limited_agent.invoke({"input": "Process this"})
+        print(f"Result: {result['output']}")
     except Exception as e:
         print(f"Agent stopped due to: {type(e).__name__}: {e}")
 

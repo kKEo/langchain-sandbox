@@ -1,10 +1,10 @@
 """
 Solution to Exercise 4: Custom Database Query Tool
 """
-import os
 from dotenv import load_dotenv
-from langchain.tools import BaseTool
-from langchain.agents import initialize_agent, AgentType
+from langchain import hub
+from langchain.agents import AgentExecutor, create_react_agent
+from langchain_core.tools import BaseTool
 from langchain_openai import ChatOpenAI
 
 # Load environment variables
@@ -80,10 +80,12 @@ class DatabaseTool(BaseTool):
 
 # Initialize agent with database tool
 llm = ChatOpenAI(model="gpt-3.5-turbo", temperature=0)
-agent = initialize_agent(
-    tools=[DatabaseTool()],
-    llm=llm,
-    agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
+tools = [DatabaseTool()]
+prompt = hub.pull("hwchase17/react")
+agent = create_react_agent(llm, tools, prompt)
+agent_executor = AgentExecutor(
+    agent=agent,
+    tools=tools,
     verbose=True
 )
 
@@ -97,7 +99,7 @@ queries = [
 for query in queries:
     print(f"\nQuery: {query}")
     print("=" * 70)
-    result = agent.run(query)
-    print(f"\nResult: {result}")
+    result = agent_executor.invoke({"input": query})
+    print(f"\nResult: {result['output']}")
     print("=" * 70)
 

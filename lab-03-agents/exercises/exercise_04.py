@@ -12,9 +12,9 @@ INSTRUCTIONS:
 2. Implement a simple in-memory "database" with sample data
 3. Parse simple queries (SELECT statements)
 4. Return formatted results
-5. Integrate with an agent
+5. Integrate with an agent built using the React prompt and AgentExecutor
 
-HINT: Use a dictionary to simulate a database table
+HINT: Use BaseTool from `langchain_core.tools` and `agent_executor.invoke(...)`
 """
 import os
 from dotenv import load_dotenv
@@ -23,7 +23,10 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # TODO: Import necessary modules
-# from langchain...
+# from langchain import hub
+# from langchain.agents import AgentExecutor, create_react_agent
+# from langchain_core.tools import BaseTool
+# from langchain_openai import ChatOpenAI
 
 # Sample data (simulated database)
 # users = [
@@ -36,7 +39,9 @@ load_dotenv()
 # class DatabaseTool(BaseTool): ...
 
 # TODO: Initialize agent with database tool
+# prompt = ...
 # agent = ...
+# agent_executor = AgentExecutor(...)
 
 # TODO: Test queries
 # queries = [

@@ -4,11 +4,11 @@ Example: Agent Observability and Debugging
 This example demonstrates how to observe and debug agent behavior
 using verbose mode and custom callbacks.
 """
-import os
 from dotenv import load_dotenv
-from langchain.agents import initialize_agent, AgentType
-from langchain.tools import Tool
+from langchain import hub
+from langchain.agents import AgentExecutor, create_react_agent
 from langchain.callbacks import StdOutCallbackHandler
+from langchain_core.tools import Tool
 from langchain_openai import ChatOpenAI
 
 # Load environment variables
@@ -54,11 +54,11 @@ def observability_example():
     
     # Initialize agent with verbose mode and callbacks
     callbacks = [AgentCallback()]
-    
-    agent = initialize_agent(
+    prompt = hub.pull("hwchase17/react")
+    agent = create_react_agent(llm, tools, prompt)
+    agent_executor = AgentExecutor(
+        agent=agent,
         tools=tools,
-        llm=llm,
-        agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
         verbose=True,  # Enable verbose output
         callbacks=callbacks  # Add custom callbacks
     )
@@ -71,10 +71,10 @@ def observability_example():
     print(f"Query: {query}")
     print("=" * 70)
     
-    result = agent.run(query, callbacks=callbacks)
+    result = agent_executor.invoke({"input": query}, callbacks=callbacks)
     
     print("\n" + "=" * 70)
-    print(f"Final Result: {result}")
+    print(f"Final Result: {result['output']}")
     print("=" * 70)
 
 if __name__ == "__main__":
